@@ -1,112 +1,90 @@
+// ignore_for_file: prefer_const_constructors, avoid_init_to_null
+
 import 'package:flutter/material.dart';
- 
-void main() => runApp(const MyApp());
- 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
- 
-  static const String _title = 'Sample App';
- 
+import 'package:phone_call_app/assessment/trainning_completion.dart';
+
+class UserLogin extends StatefulWidget {
+  const UserLogin({Key? key}) : super(key: key);
+
+  @override
+  State<UserLogin> createState() => _UserLoginState();
+}
+
+class _UserLoginState extends State<UserLogin> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  var nameError = null;
+  var emailError = null;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      home: Scaffold(
-        appBar: AppBar(title: const Text(_title)),
-        body: const MyStatefulWidget(),
+    return Scaffold(
+      appBar: AppBar(title: Text("User Login")),
+      body: Padding(
+        padding: const EdgeInsets.all(40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            Text(
+              "Login",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                  errorText: nameError,
+                  labelText: "Student Name",
+                  icon: Icon(Icons.person),
+                  hintText: "Enter your name"),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(
+                  errorText: emailError,
+                  hintText: "Enter your email",
+                  labelText: "Email ID",
+                  icon: Icon(Icons.alternate_email_sharp)),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Center(
+                child: SizedBox(
+                    width: 240,
+                    height: 40,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        onPressed: () {
+                          setState(() {
+                            if (nameController.text.isEmpty) {
+                              nameError =
+                                  "Field should not be blank in Name field";
+                            } else if (emailController.text.isEmpty) {
+                              emailError =
+                                  "Field should not be blank in Email field";
+                            } else {
+                              nameError = null;
+                              emailError = null;
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return TrainingCompletion(
+                                    Name: nameController.text.toString());
+                              }));
+                            }
+                          });
+                        },
+                        child: Text("Login"))))
+          ],
+        ),
       ),
     );
-  }
-}
- 
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
- 
-  @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
-}
- 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
- 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: <Widget>[
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: const Text(
-                  '',
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 30),
-                )),
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: const Text(
-                  'Sign in',
-                  style: TextStyle(fontSize: 20),
-                )),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'User Name',
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child: TextField(
-                obscureText: true,
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                //forgot password screen
-              },
-              child: const Text('Forgot Password',),
-            ),
-            Container(
-                height: 50,
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: ElevatedButton(
-                  child: const Text('Login'),
-                  onPressed: () {
-                    print(nameController.text);
-                    print(passwordController.text);
-                  },
-                )
-            ),
-            Row(
-              children: <Widget>[
-                const Text('Does not have account?'),
-                TextButton(
-                  child: const Text(
-                    'Sign in',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  onPressed: () {
-                    //signup screen
-                  },
-                )
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-            ),
-          ],
-        ));
   }
 }
